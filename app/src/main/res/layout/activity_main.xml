@@ -1,120 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#EFEFEF"
         android:orientation="vertical">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_mid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
         <com.suhel.gameoflife.GameScreen
             android:id="@+id/screen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_mid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/lbl_slow"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginStart="10dp"
+            android:shadowColor="@android:color/black"
+            android:text="Slow"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/seeker"
+            app:layout_constraintStart_toStartOf="@+id/seeker"
+            app:layout_constraintTop_toBottomOf="@+id/screen"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/lbl_fast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:shadowColor="@android:color/black"
+            android:text="Fast"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/lbl_slow"
+            app:layout_constraintEnd_toEndOf="@+id/seeker" />
+
+        <SeekBar
+            android:id="@+id/seeker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|start"
-                android:layout_marginStart="10dp"
-                android:scrollbarSize="12sp"
-                android:shadowColor="@android:color/black"
-                android:text="Slow"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|end"
-                android:layout_marginEnd="10dp"
-                android:scrollbarSize="12sp"
-                android:shadowColor="@android:color/black"
-                android:text="Fast"
-                android:textStyle="bold" />
-
-            <SeekBar
-                android:id="@+id/seeker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:max="19" />
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/btnEdit"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitCenter"
-                android:padding="24dp"
-                android:src="@drawable/ic_mode_edit"
-                android:tint="@color/fg_button" />
-
-            <ImageView
-                android:id="@+id/btnPlayPause"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_play"
-                android:tint="@color/fg_button" />
-
-            <ImageView
-                android:id="@+id/btnClear"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitCenter"
-                android:padding="22dp"
-                android:src="@drawable/ic_clear"
-                android:tint="@color/fg_button" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
-            android:gravity="top"
-            android:orientation="horizontal">
+            android:layout_marginEnd="24dp"
+            android:max="19"
+            app:layout_constraintBottom_toTopOf="@+id/btn_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_slow" />
 
-            <TextView
-                android:id="@+id/tvGen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@android:color/black"
-                android:textSize="48sp" />
+        <ImageView
+            android:id="@+id/btn_edit"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="24dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_mode_edit"
+            app:layout_constraintBottom_toTopOf="@+id/tv_gen"
+            app:layout_constraintEnd_toStartOf="@+id/btn_play_pause"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seeker"
+            app:tint="@color/fg_button" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="G"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/btn_play_pause"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_play"
+            app:layout_constraintEnd_toStartOf="@+id/btn_clear"
+            app:layout_constraintStart_toEndOf="@+id/btn_edit"
+            app:layout_constraintTop_toTopOf="@+id/btn_edit"
+            app:tint="@color/fg_button" />
 
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/btn_clear"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="22dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_clear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_play_pause"
+            app:layout_constraintTop_toTopOf="@+id/btn_play_pause"
+            app:tint="@color/fg_button" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tv_gen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/black"
+            android:textSize="48sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_edit" />
+
+        <TextView
+            android:id="@+id/lbl_gen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="G"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_gen"
+            app:layout_constraintStart_toEndOf="@+id/tv_gen" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
