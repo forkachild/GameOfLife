@@ -1,53 +1,41 @@
-package com.suhel.gameoflife;
+package com.suhel.gameoflife
 
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Handler
+import kotlin.jvm.Volatile
+import android.os.Looper
+import java.lang.Exception
+import kotlin.jvm.Synchronized
 
-public abstract class SimpleTimer extends Thread {
+abstract class SimpleTimer : Thread() {
+    @get:Synchronized
+    @set:Synchronized
+    @Volatile
+    var isRunning = true
 
-    private volatile boolean isRunning = true;
-    private volatile boolean isPaused = false;
-    private volatile long delay = 1000;
-    private final Handler mainThread = new Handler(Looper.getMainLooper());
+    @get:Synchronized
+    @set:Synchronized
+    @Volatile
+    var isPaused = false
 
-    @Override
-    public void run() {
+    @get:Synchronized
+    @set:Synchronized
+    @Volatile
+    var delay: Long = 1000
+
+    private val mainThread = Handler(Looper.getMainLooper())
+
+    override fun run() {
         while (isRunning) {
             try {
                 while (isPaused) {
                 }
-                Thread.sleep(delay);
-                mainThread.post(this::tick);
-            } catch (Exception e) {
-                e.printStackTrace();
+                sleep(delay)
+                mainThread.post { tick() }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
-    public synchronized void setDelay(long delay) {
-        this.delay = delay;
-    }
-
-    public synchronized long getDelay() {
-        return delay;
-    }
-
-    public synchronized void setPaused(boolean paused) {
-        isPaused = paused;
-    }
-
-    public synchronized boolean isPaused() {
-        return isPaused;
-    }
-
-    public synchronized void setRunning(boolean running) {
-        isRunning = running;
-    }
-
-    public synchronized boolean isRunning() {
-        return isRunning;
-    }
-
-    public abstract void tick();
-
+    abstract fun tick()
 }

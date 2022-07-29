@@ -1,92 +1,71 @@
-package com.suhel.gameoflife;
+package com.suhel.gameoflife
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.SeekBar;
+import androidx.databinding.DataBindingUtil
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
+import com.suhel.gameoflife.databinding.ActivityMainBinding
 
-import com.suhel.gameoflife.databinding.ActivityMainBinding;
+class MainActivity : AppCompatActivity() {
 
-public class MainActivity extends AppCompatActivity {
+    private lateinit var binding: ActivityMainBinding
+    private var isPlaying = false
+    private var currentGen = 0
 
-    private ActivityMainBinding binding;
-    private boolean isPlaying = false;
-    private int currentGen = 0;
-    private SimpleTimer timer = new SimpleTimer() {
-
-        @Override
-        public void tick() {
-            binding.screen.nextFrame();
-            currentGen++;
-            binding.tvGen.setText(String.valueOf(currentGen));
+    private val timer: SimpleTimer = object : SimpleTimer() {
+        override fun tick() {
+            binding.screen.nextFrame()
+            currentGen++
+            binding.tvGen.text = currentGen.toString()
         }
+    }
 
-    };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.btnPlayPause.setOnClickListener(v -> playPause());
-        binding.btnClear.setEnabled(false);
-        binding.btnEdit.setOnClickListener(v -> {
-            boolean currentEditableState = binding.screen.isEditable();
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.btnPlayPause.setOnClickListener { playPause() }
+        binding.btnClear.isEnabled = false
+        binding.btnEdit.setOnClickListener {
+            val currentEditableState = binding.screen.isEditable
             if (!currentEditableState && isPlaying) {
-                setPausedState();
+                setPausedState()
+            }
+            binding.btnPlayPause.isEnabled = currentEditableState
+            binding.seeker.isEnabled = currentEditableState
+            binding.screen.isEditable = !currentEditableState
+            binding.btnClear.isEnabled = !currentEditableState
+        }
+        binding.btnClear.setOnClickListener {
+            binding.screen.clear()
+            currentGen = 0
+            binding.tvGen.text = currentGen.toString()
+        }
+        binding.seeker.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                timer.delay = (1000 / (progress + 1)).toLong()
             }
 
-            binding.btnPlayPause.setEnabled(currentEditableState);
-            binding.seeker.setEnabled(currentEditableState);
-            binding.screen.setEditable(!currentEditableState);
-            binding.btnClear.setEnabled(!currentEditableState);
-        });
-        binding.btnClear.setOnClickListener(v -> {
-            binding.screen.clear();
-            currentGen = 0;
-            binding.tvGen.setText(String.valueOf(currentGen));
-        });
-
-        binding.seeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                timer.setDelay(1000 / (progress + 1));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-
-        });
-
-        timer.setPaused(true);
-        timer.start();
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+        timer.isPaused = true
+        timer.start()
     }
 
-    private void playPause() {
-        if (isPlaying)
-            setPausedState();
-        else
-            setPlayingState();
+    private fun playPause() {
+        if (isPlaying) setPausedState() else setPlayingState()
     }
 
-    private void setPausedState() {
-        isPlaying = false;
-        timer.setPaused(true);
-        binding.btnPlayPause.setImageResource(R.drawable.ic_play);
+    private fun setPausedState() {
+        isPlaying = false
+        timer.isPaused = true
+        binding.btnPlayPause.setImageResource(R.drawable.ic_play)
     }
 
-    private void setPlayingState() {
-        isPlaying = true;
-        timer.setPaused(false);
-        binding.btnPlayPause.setImageResource(R.drawable.ic_pause);
+    private fun setPlayingState() {
+        isPlaying = true
+        timer.isPaused = false
+        binding.btnPlayPause.setImageResource(R.drawable.ic_pause)
     }
-
 }
